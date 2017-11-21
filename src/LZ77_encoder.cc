@@ -4,19 +4,39 @@
 
 #define LZ77_0 '%'
 #define LZ77_1 '$'
+#define LZ77_MIN_LENGTH 4
+
 
 std::string LZ77Encoder::encode(const std::string& text) {
   std::string code;
 
-  for (unsigned int i = 0; i < text.size(); i++) {
-    if (i && text[i] == text[i - 1]) {
-      code.push_back(LZ77_1);
-      code += uintToBytes(1);
-      code += uintToBytes(1);
-      continue;
+  for (unsigned int at = 0; at < text.size();) {
+    unsigned int begin = at <= buffer_size ? 0 : at - buffer_size;
+    unsigned int best_length = 0;
+    unsigned int best_offset = 0;
+    for (unsigned int i = begin; i < at; i++) {
+      unsigned int cur_length = 0;
+      while (cur_length < buffer_size
+          && at + cur_length < text.size()
+          && text[i + cur_length] == text[at + cur_length]) {
+          cur_length++;
+      }
+      if (cur_length > best_length) {
+        best_length = cur_length;
+        best_offset = at - i;
+      }
     }
-    code.push_back(LZ77_0);
-    code += text[i];
+
+    if (best_length >= LZ77_MIN_LENGTH) {
+      code.push_back(LZ77_1);
+      code += uintToBytes(best_length);
+      code += uintToBytes(best_offset);
+      at += best_length;
+    } else {
+      code.push_back(LZ77_0);
+      code += text[at];
+      at++;
+    }
   }
 
   return code;
