@@ -114,8 +114,8 @@ void SuffixTree::traverse(int node, int level, const std::string& text) {
             nodes[node].getBegin(), nodes[node].getLength(text.size()))
         << std::endl;
     }
-  for (int i = 0; i < 256; i++) {
-    if (!nodes[node].has(i)) continue;
+  // for (unsigned char i : nodes[node]) {
+  for (auto i : nodes[node]) {
     int next = nodes[node][i];
     traverse(next, level + 1, text);
   }
