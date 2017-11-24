@@ -1,7 +1,7 @@
 #ifndef IPMT_ENCODER_H
 #define IPMT_ENCODER_H
 
-#include <string>
+#include "int_encoder.h"
 
 class Encoder {
 public:
@@ -9,8 +9,7 @@ public:
   virtual std::string decode(const std::string& code) = 0;
 
 protected:
-  std::string uintToBytes(uint32_t value);
-  uint32_t bytesToUint(const std::string& bytes, int offset = 0);
+  IntEncoder int_encoder;
 };
 
 #endif /* IPMT_ENCODER_H */

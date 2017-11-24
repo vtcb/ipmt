@@ -1,8 +1,8 @@
-#include "encoder.h"
+#include "int_encoder.h"
 
 #include <string>
 
-std::string Encoder::uintToBytes(uint32_t value) {
+std::string IntEncoder::uintToBytes(uint32_t value) {
   std::string bytes;
   bytes += static_cast<unsigned char>(value >> 24);
   bytes += static_cast<unsigned char>(value >> 16);
@@ -11,7 +11,7 @@ std::string Encoder::uintToBytes(uint32_t value) {
   return bytes;
 }
 
-uint32_t Encoder::bytesToUint(const std::string& bytes, int offset) {
+uint32_t IntEncoder::bytesToUint(const std::string& bytes, int offset) {
   return (static_cast<uint32_t>(static_cast<unsigned char>(
             bytes[offset + 0])) << 24)
        + (static_cast<uint32_t>(static_cast<unsigned char>(

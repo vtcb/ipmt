@@ -17,8 +17,8 @@ std::string LZ77Encoder::encode(const std::string& text) {
 
     if (best_length >= LZ77_MIN_LENGTH) {
       code.push_back(LZ77_1);
-      code += uintToBytes(best_length);
-      code += uintToBytes(best_offset);
+      code += int_encoder.uintToBytes(best_length);
+      code += int_encoder.uintToBytes(best_offset);
       at += best_length;
     } else {
       code.push_back(LZ77_0);
@@ -41,8 +41,8 @@ std::string LZ77Encoder::decode(const std::string& code) {
         break;
       case LZ77_1:
         do {
-          uint32_t length = bytesToUint(code, i + 1);
-          uint32_t offset = bytesToUint(code, i + 5);
+          uint32_t length = int_encoder.bytesToUint(code, i + 1);
+          uint32_t offset = int_encoder.bytesToUint(code, i + 5);
           for (unsigned int j = text.size() - offset; length; j++, length--) {
             text += text[j];
           }
