@@ -3,6 +3,7 @@
 
 #include "int_encoder.h"
 
+// TODO(bolado): Make it static or singleton.
 class Encoder {
 public:
   virtual std::string encode(const std::string& text) = 0;

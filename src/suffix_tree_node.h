@@ -17,6 +17,9 @@ public:
   void setEnd(int end);
   void setLength(int length);
 
+  std::string serialize() const;
+  unsigned int deserialize(const std::string& code, unsigned int offset = 0);
+
   class iterator {
   public:
     iterator(const SuffixTreeNode* node, int at);

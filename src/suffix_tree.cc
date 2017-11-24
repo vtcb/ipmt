@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 
+#include "int_encoder.h"
+
 void SuffixTree::build(const std::string& text) {
   // TODO(bolado): Do not depend on terminator.
   nodes = {SuffixTreeNode()};
@@ -98,6 +100,36 @@ int SuffixTree::splitNode(
   nodes.push_back(std::move(new_node));
   suffix_links.push_back(0);
   return nodes.size() - 1;
+}
+
+std::string SuffixTree::serialize() const {
+  IntEncoder encoder;
+  std::string code;
+
+  code += encoder.uintToBytes(nodes.size());
+
+  for (const SuffixTreeNode& node : nodes) {
+    code += node.serialize();
+  }
+
+  return code;
+}
+
+unsigned int SuffixTree::deserialize(
+    const std::string& code, unsigned int offset) {
+  IntEncoder encoder;
+  unsigned int initial_offset = offset;
+
+  unsigned int length = encoder.bytesToUint(code, offset);
+  offset += 4;
+
+  nodes.assign(length, {});
+
+  for (SuffixTreeNode& node : nodes) {
+    offset += node.deserialize(code, offset);
+  }
+
+  return offset - initial_offset;
 }
 
 void SuffixTree::traverse(const std::string& text) {

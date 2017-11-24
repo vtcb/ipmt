@@ -17,6 +17,12 @@ int main(int argc, char *argv[]) {
   st.build(text);
   st.traverse(text);
 
+  std::cerr << std::endl;
+
+  auto st2 = SuffixTree();
+  st2.deserialize("a" + st.serialize(), 1);
+  st2.traverse(text);
+
   // // Encoder test
   // auto encoder = LZ77Encoder();
   // // std::string text = "aacaacabcabaaac";

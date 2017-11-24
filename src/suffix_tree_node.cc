@@ -1,5 +1,7 @@
 #include "suffix_tree_node.h"
 
+#include "int_encoder.h"
+
 SuffixTreeNode::SuffixTreeNode(int begin, int end)
     : next(256, -1), begin_(begin), end_(end) {}
 
@@ -33,6 +35,43 @@ void SuffixTreeNode::setEnd(int end) {
 
 void SuffixTreeNode::setLength(int length) {
   end_ = begin_ + length - 1;
+}
+
+std::string SuffixTreeNode::serialize() const {
+  IntEncoder encoder;
+  std::string code;
+
+  code += encoder.uintToBytes(begin_);
+  code += encoder.uintToBytes(end_);
+
+  for (int edge : *this) {
+    code += encoder.uintToBytes(edge);
+    code += encoder.uintToBytes(next[edge]);
+  }
+  code += encoder.uintToBytes(-1);
+
+  return code;
+}
+
+unsigned int SuffixTreeNode::deserialize(
+    const std::string& code, unsigned int offset) {
+  IntEncoder encoder;
+  unsigned int initial_offset = offset;
+
+  begin_ = encoder.bytesToUint(code, offset);
+  end_ = encoder.bytesToUint(code, offset + 4);
+  offset += 8;
+
+  for (; offset < code.size();) {
+    int edge = encoder.bytesToUint(code, offset);
+    offset += 4;
+    if (edge == -1) break;
+    int node = encoder.bytesToUint(code, offset);
+    offset += 4;
+    next[edge] = node;
+  }
+
+  return offset - initial_offset;
 }
 
 SuffixTreeNode::iterator::iterator(const SuffixTreeNode* node, int at)
