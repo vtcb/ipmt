@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 
       index->build(text);
 
-      Magic(index, encoder).save("test.idx", text);
+      Magic(index, encoder).save(file_name + ".idx", text);
     }
   } else if (input_parser.mode() == "search") {
     std::vector<std::string> file_list = input_parser.fileList();
