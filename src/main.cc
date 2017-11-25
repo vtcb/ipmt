@@ -43,6 +43,8 @@ int main(int argc, char *argv[]) {
     }
   } else if (input_parser.mode() == "search") {
     std::vector<std::string> file_list = input_parser.fileList();
+    std::vector<std::string> pattern_list = input_parser.patternList();
+
     if (file_list.empty()) {
       std::cout << "File list can't be empty." << std::endl;
       // usage
@@ -53,10 +55,12 @@ int main(int argc, char *argv[]) {
       Magic magic;
       std::string text = magic.open(file_name);
       ((SuffixTree*) magic.getIndex())->traverse(text);
-      dbg(magic.getIndex()->search("x", text));
-      dbg(magic.getIndex()->search("a", text));
-      dbg(magic.getIndex()->search("ab", text));
-      dbg(magic.getIndex()->search("abc", text));
+      for (const std::string& pattern : pattern_list) {
+    int matches = 0;
+        dbg("search: " << pattern)
+        matches += magic.getIndex()->search(pattern, text);
+    std::cout << "Matches: " << matches << std::endl;
+      }
     }
   } else {
     std::cout << "Invalid execution mode." << std::endl;

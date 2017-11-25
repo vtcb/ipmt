@@ -152,14 +152,13 @@ int SuffixTree::search(const std::string& pattern, const std::string& text) {
         return 0;
       }
       length++;
-      if (nodes[nodes[node][edge]].getLength(text.size()) == length) {
-        node = nodes[node][edge];
-        edge = -1;
-        length = 0;
-      }
+    }
+    if (nodes[nodes[node][edge]].getLength(text.size()) == length) {
+      node = nodes[node][edge];
+      edge = -1;
+      length = 0;
     }
   }
-
   return edge == -1 ? matches[node] : matches[nodes[node][edge]];
 }
 
@@ -191,9 +190,11 @@ void SuffixTree::traverse(int node, int level, const std::string& text) {
     std::cout
         << text.substr(
             nodes[node].getBegin(), nodes[node].getLength(text.size()))
+        << ' '
+        << matches[node]
         << std::endl;
-    }
-  // for (unsigned char i : nodes[node]) {
+  }
+
   for (auto i : nodes[node]) {
     int next = nodes[node][i];
     traverse(next, level + 1, text);
