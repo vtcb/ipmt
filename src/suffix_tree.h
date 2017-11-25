@@ -13,6 +13,7 @@ public:
   void traverse(const std::string& text);
   std::string serialize() const;
   unsigned int deserialize(const std::string& code, unsigned int offset = 0);
+  std::string magic() const;
 
 private:
   std::vector<SuffixTreeNode> nodes;

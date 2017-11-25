@@ -6,6 +6,7 @@
 class IntEncoder {
 public:
   static std::string uintToBytes(uint32_t value);
+  static uint32_t bytesToUint(const char* bytes, int offset = 0);
   static uint32_t bytesToUint(const std::string& bytes, int offset = 0);
 };
 

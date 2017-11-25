@@ -77,3 +77,7 @@ std::pair<unsigned int, unsigned int>
   }
   return std::make_pair(best_length, best_offset);
 }
+
+std::string LZ77Encoder::magic() const {
+  return "LZ77";
+}

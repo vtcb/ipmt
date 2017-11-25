@@ -150,3 +150,7 @@ void SuffixTree::traverse(int node, int level, const std::string& text) {
     traverse(next, level + 1, text);
   }
 }
+
+std::string SuffixTree::magic() const {
+  return "SUFT";
+}

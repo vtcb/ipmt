@@ -3,6 +3,7 @@
 
 #include "suffix_tree.h"
 #include "LZ77_encoder.h"
+#include "magic.h"
 
 #define dbg(x) std::cerr << ">>> " << x << std::endl;
 #define _ << ", " <<
@@ -17,11 +18,12 @@ int main(int argc, char *argv[]) {
   st.build(text);
   st.traverse(text);
 
-  std::cerr << std::endl;
+  auto saver = Magic(&st, new LZ77Encoder());
+  saver.save("test.idx", text);
 
-  auto st2 = SuffixTree();
-  st2.deserialize("a" + st.serialize(), 1);
-  st2.traverse(text);
+  auto opener = Magic();
+  dbg("T: " << opener.open("test.idx"));
+  ((SuffixTree*)opener.getIndex())->traverse(text);
 
   // // Encoder test
   // auto encoder = LZ77Encoder();
@@ -33,6 +35,13 @@ int main(int argc, char *argv[]) {
   // dbg(text);
   // dbg(encoded _ encoded.length());
   // dbg(decoded _ decoded.length());
+
+
+  // if (file_name != "") {
+  //   std::ifstream ifs(file_name);
+  //   text = std::string( (std::istreambuf_iterator<char>(ifs) ),
+  //                       (std::istreambuf_iterator<char>()    ) );
+  // }
 
   return 0;
 }
