@@ -1,5 +1,5 @@
-#ifndef PMT_FLAG_PARSER_H
-#define PMT_FLAG_PARSER_H
+#ifndef IPMT_FLAG_PARSER_H
+#define IPMT_FLAG_PARSER_H
 
 #include <string>
 #include <vector>
@@ -18,4 +18,4 @@ private:
   std::vector<std::string> args;
 };
 
-#endif /* PMT_FLAG_PARSER_H */
+#endif /* IPMT_FLAG_PARSER_H */

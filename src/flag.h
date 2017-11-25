@@ -1,5 +1,5 @@
-#ifndef PMT_FLAG_H
-#define PMT_FLAG_H
+#ifndef IPMT_FLAG_H
+#define IPMT_FLAG_H
 
 #include <string>
 #include <vector>
@@ -32,4 +32,4 @@ private:
   bool set;
 };
 
-#endif /* PMT_FLAG_H */
+#endif /* IPMT_FLAG_H */
