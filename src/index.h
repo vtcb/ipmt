@@ -4,6 +4,7 @@
 class Index {
 public:
   virtual void build(const std::string& text) = 0;
+  virtual int search(const std::string& pattern, const std::string& text) = 0;
   virtual std::string serialize() const = 0;
   virtual unsigned int deserialize(const std::string& code, unsigned int offset = 0) = 0;
   virtual std::string magic() const = 0;

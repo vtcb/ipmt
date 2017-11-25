@@ -84,6 +84,9 @@ void SuffixTree::build(const std::string& text) {
       }
     }
   }
+
+  suffix_links.clear();
+  getMatches();
 }
 
 int SuffixTree::splitNode(
@@ -127,7 +130,53 @@ unsigned int SuffixTree::deserialize(
     offset += node.deserialize(code, offset);
   }
 
+  getMatches();
+
   return offset - initial_offset;
+}
+
+int SuffixTree::search(const std::string& pattern, const std::string& text) {
+  int node = 0;
+  int edge = -1;
+  int length = 0;
+
+  for (unsigned char ch : pattern) {
+    if (edge == -1) {
+      if (!nodes[node].has(ch)) {
+        return 0;
+      }
+      edge = ch;
+      length = 1;
+    } else {
+      if (text[nodes[nodes[node][edge]].getBegin() + length] != ch) {
+        return 0;
+      }
+      length++;
+      if (nodes[nodes[node][edge]].getLength(text.size()) == length) {
+        node = nodes[node][edge];
+        edge = -1;
+        length = 0;
+      }
+    }
+  }
+
+  return edge == -1 ? matches[node] : matches[nodes[node][edge]];
+}
+
+void SuffixTree::getMatches() {
+  matches.assign(nodes.size(), 0);
+  getMatches(0);
+}
+
+int SuffixTree::getMatches(int node) {
+  int& ans = matches[node];
+  for (int edge : nodes[node]) {
+    ans += getMatches(nodes[node][edge]);
+  }
+  if (!ans) {
+    ans++;
+  }
+  return ans;
 }
 
 void SuffixTree::traverse(const std::string& text) {

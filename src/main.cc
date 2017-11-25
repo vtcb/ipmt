@@ -53,6 +53,10 @@ int main(int argc, char *argv[]) {
       Magic magic;
       std::string text = magic.open(file_name);
       ((SuffixTree*) magic.getIndex())->traverse(text);
+      dbg(magic.getIndex()->search("x", text));
+      dbg(magic.getIndex()->search("a", text));
+      dbg(magic.getIndex()->search("ab", text));
+      dbg(magic.getIndex()->search("abc", text));
     }
   } else {
     std::cout << "Invalid execution mode." << std::endl;
