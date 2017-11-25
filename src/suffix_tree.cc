@@ -103,10 +103,9 @@ int SuffixTree::splitNode(
 }
 
 std::string SuffixTree::serialize() const {
-  IntEncoder encoder;
   std::string code;
 
-  code += encoder.uintToBytes(nodes.size());
+  code += IntEncoder::uintToBytes(nodes.size());
 
   for (const SuffixTreeNode& node : nodes) {
     code += node.serialize();
@@ -117,10 +116,9 @@ std::string SuffixTree::serialize() const {
 
 unsigned int SuffixTree::deserialize(
     const std::string& code, unsigned int offset) {
-  IntEncoder encoder;
   unsigned int initial_offset = offset;
 
-  unsigned int length = encoder.bytesToUint(code, offset);
+  unsigned int length = IntEncoder::bytesToUint(code, offset);
   offset += 4;
 
   nodes.assign(length, {});

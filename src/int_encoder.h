@@ -5,8 +5,8 @@
 
 class IntEncoder {
 public:
-  std::string uintToBytes(uint32_t value);
-  uint32_t bytesToUint(const std::string& bytes, int offset = 0);
+  static std::string uintToBytes(uint32_t value);
+  static uint32_t bytesToUint(const std::string& bytes, int offset = 0);
 };
 
 #endif /* IPMT_INT_ENCODER_H */

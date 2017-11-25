@@ -38,35 +38,33 @@ void SuffixTreeNode::setLength(int length) {
 }
 
 std::string SuffixTreeNode::serialize() const {
-  IntEncoder encoder;
   std::string code;
 
-  code += encoder.uintToBytes(begin_);
-  code += encoder.uintToBytes(end_);
+  code += IntEncoder::uintToBytes(begin_);
+  code += IntEncoder::uintToBytes(end_);
 
   for (int edge : *this) {
-    code += encoder.uintToBytes(edge);
-    code += encoder.uintToBytes(next[edge]);
+    code += IntEncoder::uintToBytes(edge);
+    code += IntEncoder::uintToBytes(next[edge]);
   }
-  code += encoder.uintToBytes(-1);
+  code += IntEncoder::uintToBytes(-1);
 
   return code;
 }
 
 unsigned int SuffixTreeNode::deserialize(
     const std::string& code, unsigned int offset) {
-  IntEncoder encoder;
   unsigned int initial_offset = offset;
 
-  begin_ = encoder.bytesToUint(code, offset);
-  end_ = encoder.bytesToUint(code, offset + 4);
+  begin_ = IntEncoder::bytesToUint(code, offset);
+  end_ = IntEncoder::bytesToUint(code, offset + 4);
   offset += 8;
 
   for (; offset < code.size();) {
-    int edge = encoder.bytesToUint(code, offset);
+    int edge = IntEncoder::bytesToUint(code, offset);
     offset += 4;
     if (edge == -1) break;
-    int node = encoder.bytesToUint(code, offset);
+    int node = IntEncoder::bytesToUint(code, offset);
     offset += 4;
     next[edge] = node;
   }
