@@ -72,6 +72,16 @@ unsigned int SuffixTreeNode::deserialize(
   return offset - initial_offset;
 }
 
+SuffixTreeNode::iterator SuffixTreeNode::begin() const {
+  iterator it(this, 0);
+  if (!has(0)) ++it;
+  return it;
+}
+
+SuffixTreeNode::iterator SuffixTreeNode::end() const {
+  return iterator(this, 256);
+}
+
 SuffixTreeNode::iterator::iterator(const SuffixTreeNode* node, int at)
     : node(node), at(at) {}
 

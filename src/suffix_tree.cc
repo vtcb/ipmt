@@ -6,7 +6,6 @@
 #include "int_encoder.h"
 
 void SuffixTree::build(const std::string& text) {
-  // TODO(bolado): Do not depend on terminator.
   nodes = {SuffixTreeNode()};
   suffix_links = {0};
 
@@ -16,8 +15,9 @@ void SuffixTree::build(const std::string& text) {
   int total_length = 0;
   int remainder = 0;
 
-  for (unsigned int i = 0; i < text.size(); i++) {
-    unsigned char ch = text[i];
+  for (unsigned int i = 0; i <= text.size(); i++) {
+    bool terminator = i == text.size();
+    unsigned char ch = terminator ? '\0' : text[i];
     remainder++;
 
     auto pushActiveNode = [&]() {
@@ -38,9 +38,9 @@ void SuffixTree::build(const std::string& text) {
     };
 
     pushActiveNode();
-    bool implicitlyRepresented = active_edge == -1
+    bool implicitlyRepresented = !terminator && (active_edge == -1
         ? nodes[active_node].has(ch)
-        : ch == text[nodes[nodes[active_node][active_edge]].getBegin() + active_length];
+        : ch == text[nodes[nodes[active_node][active_edge]].getBegin() + active_length]);
  
     if (implicitlyRepresented) {
       if (active_edge == -1) {

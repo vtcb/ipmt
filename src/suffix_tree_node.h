@@ -37,8 +37,8 @@ public:
     void increment();
   };
 
-  iterator begin() const { return ++iterator(this, 0); }
-  iterator end() const { return iterator(this, 256); }
+  iterator begin() const;
+  iterator end() const;
 
 private:
   std::vector<int> next;
