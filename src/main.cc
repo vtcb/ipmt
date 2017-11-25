@@ -4,6 +4,7 @@
 
 #include "encoder.h"
 #include "index.h"
+#include "help.h"
 #include "magic.h"
 #include "input_parser.h"
 
@@ -14,7 +15,7 @@ int main(int argc, char *argv[]) {
   input_parser.parse(argc, argv);
 
   if (input_parser.help()) {
-    std::cout << "PLEASE HELP ME!" << std::endl;
+    Help::help();
     return 0;
   }
 
@@ -22,7 +23,7 @@ int main(int argc, char *argv[]) {
     std::vector<std::string> file_list = input_parser.fileList();
     if (file_list.empty()) {
       std::cout << "File list can't be empty." << std::endl;
-      // usage
+      Help::usage();
       exit(1);
     }
 
@@ -43,7 +44,7 @@ int main(int argc, char *argv[]) {
 
     if (file_list.empty()) {
       std::cout << "File list can't be empty." << std::endl;
-      // usage
+      Help::usage();
       exit(1);
     }
 
@@ -51,7 +52,6 @@ int main(int argc, char *argv[]) {
     for (const std::string& file_name : file_list) {
       Magic magic;
       std::string text = magic.open(file_name);
-      // ((SuffixTree*) magic.getIndex())->traverse(text);
       for (const std::string& pattern : pattern_list) {
         matches += magic.getIndex()->search(pattern, text);
       }
@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
     std::cout << "Matches: " << matches << std::endl;
   } else {
     std::cout << "Invalid execution mode." << std::endl;
-    // TODO(bolado): Show USAGE
+    Help::usage();
     exit(1);
   }
 
