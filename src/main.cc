@@ -7,10 +7,6 @@
 #include "magic.h"
 #include "input_parser.h"
 
-#include "suffix_tree.h"
-#define dbg(x) std::cerr << ">>> " << x << std::endl;
-#define _ << ", " <<
-
 int main(int argc, char *argv[]) {
   std::ios_base::sync_with_stdio(false);
 
@@ -18,7 +14,7 @@ int main(int argc, char *argv[]) {
   input_parser.parse(argc, argv);
 
   if (input_parser.help()) {
-    dbg("PLEASE HELP ME!");
+    std::cout << "PLEASE HELP ME!" << std::endl;
     return 0;
   }
 
@@ -51,54 +47,21 @@ int main(int argc, char *argv[]) {
       exit(1);
     }
 
+    int matches = 0;
     for (const std::string& file_name : file_list) {
       Magic magic;
       std::string text = magic.open(file_name);
-      ((SuffixTree*) magic.getIndex())->traverse(text);
+      // ((SuffixTree*) magic.getIndex())->traverse(text);
       for (const std::string& pattern : pattern_list) {
-    int matches = 0;
-        dbg("search: " << pattern)
         matches += magic.getIndex()->search(pattern, text);
-    std::cout << "Matches: " << matches << std::endl;
       }
     }
+    std::cout << "Matches: " << matches << std::endl;
   } else {
     std::cout << "Invalid execution mode." << std::endl;
     // TODO(bolado): Show USAGE
     exit(1);
   }
-
-  // // Suffix tree test
-  // auto st = SuffixTree();
-  // // std::string text = "abcabxabcd$";
-  // std::string text = "abcabxabcd$";
-  // st.build(text);
-  // st.traverse(text);
-
-  // auto saver = Magic(&st, new LZ77Encoder());
-  // saver.save("test.idx", text);
-
-  // auto opener = Magic();
-  // dbg("T: " << opener.open("test.idx"));
-  // ((SuffixTree*)opener.getIndex())->traverse(text);
-
-  // // Encoder test
-  // auto encoder = LZ77Encoder();
-  // // std::string text = "aacaacabcabaaac";
-  // std::string text = "aaaaaaaaaaaaaaaaaaaa";
-  // std::string encoded = encoder.encode(text);
-  // std::string decoded = encoder.decode(encoded);
-
-  // dbg(text);
-  // dbg(encoded _ encoded.length());
-  // dbg(decoded _ decoded.length());
-
-
-  // if (file_name != "") {
-  //   std::ifstream ifs(file_name);
-  //   text = std::string( (std::istreambuf_iterator<char>(ifs) ),
-  //                       (std::istreambuf_iterator<char>()    ) );
-  // }
 
   return 0;
 }
