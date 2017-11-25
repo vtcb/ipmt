@@ -32,7 +32,11 @@ void FlagParser::parse(int argc, char *argv[]) {
   for (int i = 1; i < argc; i++) {
     const char *arg = argv[i];
     if (arg[0] != '-') {
-      args.push_back(arg);
+      if (i == 1) {
+        findByName("mode")->setValue(arg);
+      } else {
+        args.push_back(arg);
+      }
       continue;
     }
     if (arg[1] == '\0') continue;
