@@ -6,6 +6,8 @@
 #include "int_encoder.h"
 
 void SuffixTree::build(const std::string& text) {
+  std::cerr << "DO NOT CALL THIS!!!" << std::endl;
+  throw "BUGS!!!";
   nodes = {SuffixTreeNode()};
   suffix_links = {0};
 

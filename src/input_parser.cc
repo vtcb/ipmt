@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-#include "suffix_tree.h"
+#include "suffix_array.h"
 #include "LZ77_encoder.h"
 
 Flag<std::string> FLAG_MODE     ("mode",        'm', "");
@@ -67,7 +67,7 @@ std::vector<std::string> InputParser::fileList() {
 }
 
 Index *InputParser::index() {
-  return new SuffixTree();
+  return new SuffixArray();
 }
 
 Encoder *InputParser::encoder() {

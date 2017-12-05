@@ -7,7 +7,7 @@
 #include "index.h"
 #include "encoder.h"
 
-#include "suffix_tree.h"
+#include "suffix_array.h"
 #include "LZ77_encoder.h"
 
 #include <iostream>
@@ -51,7 +51,7 @@ std::string Magic::open(const std::string& file_name) {
 
   // TODO(bolado): Check for index type.
   file.read(buffer, 4);
-  index = new SuffixTree();
+  index = new SuffixArray();
 
   // TODO(bolado): Check for encoder type.
   file.read(buffer, 4);
