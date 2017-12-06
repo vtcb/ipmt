@@ -4,13 +4,13 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <cstring>
 
 #include "int_encoder.h"
 
 #define dbg(x) std::cerr << ">>> " << x << std::endl;
 #define _ << ", " <<
 void SuffixArray::build(const std::string& text) {
-  // naive(text);
   cp(text);
 }
 
@@ -78,13 +78,44 @@ void SuffixArray::naive(const std::string& text) {
 }
 
 int SuffixArray::search(const std::string& pattern, const std::string& text) {
-  int matches = 0;
+  int lo = 0;
+  int hi = arr.size() - 1;
+  int lower = -1;
 
-  for (int suf : arr) {
-    matches += pattern == text.substr(suf, pattern.size());
+  auto check = [&](int mid) {
+    return strncmp(
+        text.c_str() + arr[mid],
+        pattern.c_str(),
+        pattern.size());;
+  };
+
+  while (lo < hi) {
+    int mid = lo + (hi - lo) / 2;
+
+    if (check(mid) >= 0) {
+      hi = mid;
+    } else {
+      lo = mid + 1;
+    }
   }
 
-  return matches;
+  if (check(lo)) return -1;
+  lower = lo;
+
+  lo = 0;
+  hi = arr.size() - 1;
+  while (lo < hi) {
+    int mid = lo + (hi - lo) / 2;
+
+    if (check(mid) > 0) {
+      hi = mid;
+    } else {
+      lo = mid + 1;
+    }
+  }
+
+  if (check(hi)) hi--;
+  return hi - lower + 1;
 }
 
 void SuffixArray::print(const std::string& text) const {
