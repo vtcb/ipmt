@@ -79,42 +79,74 @@ void SuffixArray::naive(const std::string& text) {
 }
 
 int SuffixArray::search(const std::string& pattern, const std::string& text) {
+  dbg("SEARCH")
+  // print(text);
   int lo = 0;
   int hi = arr.size() - 1;
   int lower = -1;
 
-  auto check = [&](int mid) {
+  auto lcp = [](const std::string& a, const std::string& b) {
+    unsigned int ans = 0;
+    while (ans < a.size() && ans < b.size() && a[ans] == b[ans]) ans++;
+    return ans;
+  };
+
+  auto check = [&](int mid, int k) {
     return strncmp(
-        text.c_str() + arr[mid],
-        pattern.c_str(),
+        text.c_str() + arr[mid] + k,
+        pattern.c_str() + k,
         pattern.size());;
   };
+
+  unsigned int k = 0;
+  unsigned int n = text.size();
+  unsigned int m = pattern.size();
 
   while (lo < hi) {
     int mid = lo + (hi - lo) / 2;
 
-    if (check(mid) >= 0) {
+    while (k < m
+        && arr[lo] + k < n
+        && arr[hi] + k < n
+        && text[arr[lo] + k] == text[arr[hi] + k]) {
+      // dbg("HEY: " << k _ text[arr[lo] + k] _ pattern[k]);
+      if (text[arr[lo] + k] != pattern[k]) return 0;
+      k++;
+    }
+    if (k == m) break;
+
+    if (check(mid, k) >= 0) {
       hi = mid;
     } else {
       lo = mid + 1;
     }
   }
 
-  if (check(lo)) return 0;
+  if (check(lo, 0)) return 0;
   lower = lo;
 
+  k = 0;
   hi = arr.size() - 1;
   while (lo < hi) {
     int mid = lo + (hi - lo) / 2;
 
-    if (check(mid) > 0) {
+    while (k < m
+        && arr[lo] + k < n
+        && arr[hi] + k < n
+        && text[arr[lo] + k] == text[arr[hi] + k]) {
+      // dbg("HEY: " << k _ text[arr[lo] + k] _ pattern[k]);
+      k++;
+    }
+    if (k == m) break;
+
+    if (check(mid, 0) > 0) {
       hi = mid;
     } else {
       lo = mid + 1;
     }
   }
 
-  if (check(hi)) hi--;
+  if (check(hi, 0)) hi--;
   return hi - lower + 1;
 }
 
