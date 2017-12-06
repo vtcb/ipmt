@@ -16,12 +16,12 @@ void SuffixArray::build(const std::string& text) {
 
 void SuffixArray::cp(const std::string& text) {
   int n = text.size() + 1;
-  std::vector<int> ra(n), temp_ra(n);
-  std::vector<int> sa(n), temp_sa(n);
+  std::vector<int> sa(n), ra(n), temp(n);
+  int lim = std::max(256, n);
+  std::vector<int> c(lim, 0);
 
   auto countSort = [&](int k) {
-    int lim = std::max(256, n);
-    std::vector<int> c(lim, 0);
+    c.assign(lim, 0);
     for (int i = 0; i < n; i++) {
       c[i + k < n ? ra[i + k] : 0]++;
     }
@@ -33,12 +33,10 @@ void SuffixArray::cp(const std::string& text) {
     }
 
     for (int i = 0; i < n; i++) {
-      temp_sa[c[sa[i] + k < n ? ra[sa[i] + k] : 0]++] = sa[i];
+      temp[c[sa[i] + k < n ? ra[sa[i] + k] : 0]++] = sa[i];
     }
 
-    for (int i = 0; i < n; i++) {
-      sa[i] = temp_sa[i];
-    }
+    sa.swap(temp);
   };
 
   for (int i = 0; i < n; i++) {
@@ -47,18 +45,21 @@ void SuffixArray::cp(const std::string& text) {
   }
 
   for (int k = 1; k < n; k <<= 1) {
+    dbg("ITER: " << k)
+    dbg("CSK");
     countSort(k);
+    dbg("CS0");
     countSort(0);
+    dbg("TRA");
     int r = 0;
-    temp_ra[sa[0]] = 0;
+    temp[sa[0]] = 0;
     for (int i = 1; i < n; i++) {
-      temp_ra[sa[i]] = 
+      temp[sa[i]] = 
           (ra[sa[i]] == ra[sa[i - 1]] && ra[sa[i] + k] == ra[sa[i - 1] + k])
           ? r : ++r;
     }
-    for (int i = 0; i < n; i++) {
-      ra[i] = temp_ra[i];
-    }
+    dbg("SWA");
+    ra.swap(temp);
     if (ra[sa[n - 1]] == n - 1) break;
   }
 
@@ -99,10 +100,9 @@ int SuffixArray::search(const std::string& pattern, const std::string& text) {
     }
   }
 
-  if (check(lo)) return -1;
+  if (check(lo)) return 0;
   lower = lo;
 
-  lo = 0;
   hi = arr.size() - 1;
   while (lo < hi) {
     int mid = lo + (hi - lo) / 2;
@@ -126,6 +126,7 @@ void SuffixArray::print(const std::string& text) const {
 }
 
 std::string SuffixArray::serialize() const {
+  dbg("SERIALIZE")
   std::string code;
 
   code += IntEncoder::uintToBytes(arr.size());
@@ -133,6 +134,7 @@ std::string SuffixArray::serialize() const {
   for (int suf : arr) {
     code += IntEncoder::uintToBytes(suf);
   }
+  dbg("DONE");
 
   return code;
 }

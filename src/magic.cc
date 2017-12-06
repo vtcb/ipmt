@@ -67,7 +67,7 @@ std::string Magic::open(const std::string& file_name) {
   index->deserialize(
       encoder->decode(
           std::string( (std::istreambuf_iterator<char>(file) ),
-                       (std::istreambuf_iterator<char>()    ) )));
+                       (std::istreambuf_iterator<char>()   ) )));
 
   return text;
 }
