@@ -18,13 +18,7 @@ private:
   std::vector<int> arr;
 
   void naive(const std::string& text);
-
-  std::vector<int> sais(const std::string& text);
-  std::vector<int> sais(const std::string& text, const std::string& alphabet);
-  std::vector<int> buildBuckets(
-      const std::string& text, const std::vector<int>& code, int alphabet_size, bool end);
-  std::vector<int> encodeAlphabet(const std::string& alphabet);
-  int encodeChar(unsigned char ch, const std::vector<int>& code);
+  void cp(const std::string& text);
 
   void print(const std::string& text) const;
 };
