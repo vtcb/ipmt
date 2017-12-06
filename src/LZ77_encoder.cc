@@ -64,6 +64,26 @@ std::string LZ77Encoder::decode(const std::string& code) {
 std::pair<unsigned int, unsigned int>
     LZ77Encoder::bestMatch(const std::string& text, unsigned int at) {
   unsigned int begin = at <= buffer_size ? 0 : at - buffer_size;
+  unsigned int best_length = 0;
+  unsigned int best_offset = 0;
+  for (unsigned int i = begin; i < at; i++) {
+    unsigned int cur_length = 0;
+    while (cur_length < buffer_size
+        && at + cur_length < text.size()
+        && text[i + cur_length] == text[at + cur_length]) {
+        cur_length++;
+    }
+    if (cur_length > best_length) {
+      best_length = cur_length;
+      best_offset = at - i;
+    }
+  }
+  return std::make_pair(best_length, best_offset);
+}
+
+std::pair<unsigned int, unsigned int>
+    LZ77Encoder::bestMatchKMP(const std::string& text, unsigned int at) {
+  unsigned int begin = at <= buffer_size ? 0 : at - buffer_size;
   unsigned int end   = at + buffer_size >= text.size() ? text.size() : at + buffer_size;
   unsigned int best_length = 0;
   unsigned int best_offset = 0;

@@ -82,16 +82,66 @@ int SuffixArray::search(const std::string& pattern, const std::string& text) {
   int lo = 0;
   int hi = arr.size() - 1;
   int lower = -1;
+  // print(text);
+  dbg("T: " << text);
+
+  // return text[arr[200]] == 'A';
+
+  // auto lcp = [](const char *a, const char *b) {
+  //   int x = 0;
+  //   while (*a && *b && *a == *b) x++, a++, b++;
+  //   return x;
+  // };
+
+  // std::vector<int> Llcp(arr.size());
+  // std::vector<int> Rlcp(arr.size());
+
+
+  // auto lcp_suff = [&](i, j) {
+  //   int n = text.size();
+  //   int l = pattern.size();
+  //   int lcp = 0
+  //   for (int k = l - 1; k >= 0; k--) {
+  //     if (i >= n || j >= n) break;
+  //     if P[k][i]==P[k][j]:
+  //         lcp += (2**k)
+  //         i += (2**k)
+  //         j += (2**k)
+  //   return lcp;
+  // }
+
+  // auto fillLlcpRlcp = [&](int l, int r) {
+  //   if (r - l > 1) {
+  //     h = (l + r) / 2;
+  //     Llcp[h] = lcp_suff(sa[l], sa[h]);
+  //     Rlcp[h] = lcp_suff(sa[r], sa[h]);
+  //     fillLlcpRlcp(l, h);
+  //     fillLlcpRlcp(h, r);
+  //   }
+  // };
 
   auto check = [&](int mid) {
-    return strncmp(
-        text.c_str() + arr[mid],
-        pattern.c_str(),
-        pattern.size());;
+    const char *a = text.c_str() + arr[mid];
+    const char *b = pattern.c_str();
+    while (*a && *b && *a == *b) a++, b++;
+    return *b == 0 ? 0 : static_cast<unsigned char>(*a) - static_cast<unsigned char>(*b);
+    // return strncmp(
+    //     text.c_str() + arr[mid],
+    //     pattern.c_str(),
+    //     pattern.size());;
   };
 
   while (lo < hi) {
     int mid = lo + (hi - lo) / 2;
+
+    // int k = lcp(pattern.c_str(), text.c_str() + arr[lo]);
+    // int l = lcp(text.c_str() + arr[lo], text.c_str() + arr[mid]);
+
+    // if (k < l) {
+    //   lo = mid + 1;
+    // } else {
+
+    // }
 
     if (check(mid) >= 0) {
       hi = mid;
@@ -100,6 +150,7 @@ int SuffixArray::search(const std::string& pattern, const std::string& text) {
     }
   }
 
+  dbg("CHECK: " << lo _ arr[lo] _ text[arr[lo]] _ check(lo))
   if (check(lo)) return 0;
   lower = lo;
 
@@ -120,8 +171,13 @@ int SuffixArray::search(const std::string& pattern, const std::string& text) {
 
 void SuffixArray::print(const std::string& text) const {
   std::cout << "SUFFIX ARRAY" << std::endl;
+  int cnt = 0;
   for (int suf : arr) {
-    std::cout << text.substr(suf) << std::endl;
+    std::cout << cnt << ": '" << text.substr(suf, 10) << "'" << std::endl;
+    cnt++;
+    if (cnt == 15) {
+      break;
+    }
   }
 }
 

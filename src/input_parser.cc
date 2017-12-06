@@ -10,6 +10,7 @@
 
 #include "suffix_array.h"
 #include "LZ77_encoder.h"
+#include "identity_encoder.h"
 
 Flag<std::string> FLAG_MODE     ("mode",        'm', "");
 Flag<std::string> FLAG_INDEX    ("indextype",   'i', "");
@@ -71,5 +72,5 @@ Index *InputParser::index() {
 }
 
 Encoder *InputParser::encoder() {
-  return new LZ77Encoder();
+  return new IdentityEncoder();
 }

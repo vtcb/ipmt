@@ -9,6 +9,7 @@
 
 #include "suffix_array.h"
 #include "LZ77_encoder.h"
+#include "identity_encoder.h"
 
 #include <iostream>
 #define dbg(x) std::cerr << ">>> " << x << std::endl;
@@ -55,7 +56,7 @@ std::string Magic::open(const std::string& file_name) {
 
   // TODO(bolado): Check for encoder type.
   file.read(buffer, 4);
-  encoder = new LZ77Encoder();
+  encoder = new IdentityEncoder();
   
   file.read(buffer, 4);
   text_size = IntEncoder::bytesToUint(buffer);
